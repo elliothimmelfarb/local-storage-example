@@ -6,6 +6,15 @@ function init() {
    $('.submit').click(addName);
    var names = getNames();
    renderNames(names);
+   $('.list').on('dblclick', 'li', deleteName);
+}
+
+function deleteName(event) {
+   var dName = $(event.target).text();
+   var names = getNames();
+   names.splice(names.indexOf(dName), 1);
+   writeNames(names);
+   renderNames(names);
 }
 
 function addName() {
@@ -43,9 +52,11 @@ function renderNames(names) {
    // empty the list
    // append elements to list
 
-   var $lis = names.map(name => $('<li>').text(name));
+   var $lis = names.map(name => $('<li>').addClass('name').text(name));
    $('ul.list').empty().append($lis);
 }
+
+
 
 // First Attempt
 

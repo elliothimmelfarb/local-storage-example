@@ -9,7 +9,17 @@ function init() {
    $('.list').on('dblclick', 'li', deleteName);
    $('.list').on('click', '.edit', editName);
    $('.cancel').click(cancelEdit);
-   //$('.save').click(saveEdit);
+   $('.save').click(saveEdit);
+}
+
+function saveEdit() {
+   var edit = $('.editName').val();
+   var index = $('.editArea').data('editIndex');
+   var names =  getNames();
+   names[index] = edit;
+   writeNames(names);
+   renderNames(names);
+   cancelEdit();
 }
 
 function cancelEdit() {
@@ -25,6 +35,7 @@ function editName(event) { // show edit area
 } 
 
 function deleteName(event) {
+   cancelEdit();
    var names = getNames();
    var index = $(this).index();  // $(this).index();
    names.splice(index, 1);
@@ -33,6 +44,7 @@ function deleteName(event) {
 }
 
 function addName() {
+   cancelEdit();
    var $input = $('.input')
    var name = $input.val();
    $input.val('');

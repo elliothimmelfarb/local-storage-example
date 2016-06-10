@@ -7,12 +7,27 @@ function init() {
    var names = getNames();
    renderNames(names);
    $('.list').on('dblclick', 'li', deleteName);
+   $('.list').on('click', '.edit', editName);
+   $('.cancel').click(cancelEdit);
+   //$('.save').click(saveEdit);
 }
 
+function cancelEdit() {
+   $('.editArea').hide();
+   $('.editName').val('');
+}
+
+function editName(event) { // show edit area
+   var name = $(this).siblings('.name').text();
+   var index = $(this).parent().index(); 
+   $('.editArea').show().data('editIndex', index);
+   $('.editName').val(name);
+} 
+
 function deleteName(event) {
-   var dName = $(event.target).text();
    var names = getNames();
-   names.splice(names.indexOf(dName), 1);
+   var index = $(this).index();  // $(this).index();
+   names.splice(index, 1);
    writeNames(names);
    renderNames(names);
 }
@@ -42,6 +57,7 @@ function getNames() {
 
 function writeNames(names) {
    // stringify and write array to storage
+   names = names.sort((a,b) => a > b)
    var nameStr = JSON.stringify(names);
    localStorage.names = nameStr;
 }
@@ -52,7 +68,12 @@ function renderNames(names) {
    // empty the list
    // append elements to list
 
-   var $lis = names.map(name => $('<li>').addClass('name').text(name));
+   var $lis = names.map(name => {
+      var $li = $('.template').clone()
+      $li.removeClass('template').find('.name').text(name);
+      return $li;
+   });
+
    $('ul.list').empty().append($lis);
 }
 
